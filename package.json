@@ -1,34 +1,34 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "@expo/vector-icons": "^10.0.6",
-    "@react-native-community/masked-view": "0.1.5",
-    "@react-navigation/native": "^3.7.6",
-    "@react-navigation/bottom-tabs": "^5.2.2",
-    "@react-navigation/native": "^5.1.1",
-    "@types/hammerjs": "^2.0.36",
-    "cheerio-without-node-native": "0.20.2",
-    "expo": "~36.0.0",
-    "expo-constants": "~8.0.0",
-    "react": "~16.9.0",
-    "react-dom": "~16.9.0",
-    "react-native": "./react-native-sdk-36.0.0.tar.gz",
-    "react-native-gesture-handler": "~1.5.0",
-    "react-native-reanimated": "~1.4.0",
-    "react-native-safe-area-context": "0.6.0",
-    "react-native-screens": "2.0.0-alpha.12",
-    "react-native-web": "~0.11.7",
-    "react-native-webview": "^9.0.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "babel-preset-expo": "~8.0.0"
-  },
-  "private": true
+	"name": "manhuaview",
+	"main": "node_modules/expo/AppEntry.js",
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"web": "expo start --web"
+	},
+	"dependencies": {
+		"@expo/vector-icons": "^10.0.6",
+		"@react-native-community/masked-view": "0.1.5",
+		"@react-navigation/bottom-tabs": "^5.2.2",
+		"@react-navigation/native": "^5.1.1",
+		"@types/hammerjs": "^2.0.36",
+		"cheerio-without-node-native": "0.20.2",
+		"expo": "~36.0.0",
+		"expo-constants": "~8.0.0",
+		"react": "~16.9.0",
+		"react-dom": "~16.9.0",
+		"react-native": "./react-native-sdk-36.0.0.tar.gz",
+		"react-native-gesture-handler": "~1.5.0",
+		"react-native-reanimated": "~1.4.0",
+		"react-native-safe-area-context": "0.6.0",
+		"react-native-screens": "2.0.0-alpha.12",
+		"react-native-web": "~0.11.7",
+		"react-native-webview": "7.4.3"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.0.0",
+		"babel-preset-expo": "~8.0.0"
+	},
+	"private": true
 }
