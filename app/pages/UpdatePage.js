@@ -1,48 +1,49 @@
 import React from 'react';
-import Expo from 'expo';
+import { FlatList, RefreshControl, View, Text, AsyncStorage } from 'react-native';
+import { AppLoading } from 'expo';
 import Constants from 'expo-constants';
 import { Icon, IconButton } from 'app/components';
-import { FlatList, RefreshControl, View, Text } from 'react-native';
+import { Manhuafen } from 'app/parsers';
 import { colors } from 'app/styles';
 // import { ComicItem } from './ComicItem';
 
-const parser = require('$parsers/Manhuafen.js');
+const parser = Manhuafen;
 
 export default class UpdatePage extends React.Component {
-	state = { isLoading: false, sections: [] };
+	state = { isLoading: false, mainTags: [] };
 	async refresh(renew) {
 		this.setState({ isLoading: true });
-		let sections;
+		let mainTags;
 
 		if (!renew) {
-			let cache = await AsyncStorage.getItem('sections');
+			let cache = await AsyncStorage.getItem('mainTags');
 
 			if (cache) {
-				sections = JSON.parse(cache);
+				mainTags = JSON.parse(cache);
 			} else {
 				renew = true;
 			}
 		}
 
 		if (renew) {
-			let json = await api.getMainTags();
+			const result = await parser.getMainTags();
 
-			if (json.success) {
-				sections = json.tags;
-				await AsyncStorage.setItem('sections', JSON.stringify(sections));
+			if (result.success) {
+				mainTags = result.mainTags;
+				await AsyncStorage.setItem('mainTags', JSON.stringify(mainTags));
 			}
 		}
 
-		this.setState({ sections: sections || [], isLoading: false });
+		this.setState({ isLoading: false, mainTags: mainTags || [] });
 	}
 	componentDidMount() {
-		// this.refresh(false);
-		console.log('parser', parser);
+		console.log('UpdatePage componentDidMount');
+		this.refresh(false);
 	}
-	renderSection(section) {
+	renderTag(tag) {
 		return (
-			<View key={section.title} style={{ padding: 5 }}>
-				<Text style={{ fontSize: 20, margin: 5 }}>{section.title}</Text>
+			<View key={tag.title} style={{ padding: 5 }}>
+				<Text style={{ fontSize: 20, margin: 5 }}>{tag.title}</Text>
 				<FlatList
 					numColumns={3}
 					data={section.items}
@@ -51,6 +52,15 @@ export default class UpdatePage extends React.Component {
 				/>
 			</View>
 		);
+	}
+	renderBody() {
+		const { isLoading, mainTags } = this.state;
+
+		if (isLoading) {
+			return <AppLoading />;
+		}
+
+		return mainTags.map(t => this.renderTag(t));
 	}
 	render() {
 		const { navigation } = this.props;
@@ -67,7 +77,7 @@ export default class UpdatePage extends React.Component {
 						onPress={() => navigation.navigate('Search')}
 					/>
 				</View>
-				<View style={styles.body.container}>{this.state.sections.map(s => this.renderSection(s))}</View>
+				<View style={styles.body.container}>{this.renderBody()}</View>
 			</View>
 		);
 	}
@@ -86,7 +96,7 @@ const styles = {
 			alignItems: 'center',
 			backgroundColor: colors.primary
 		},
-		title: { marginLeft: 31, fontSize: 14, fontWeight: 'bold', textAlign: 'center', color: colors.onPrimary },
+		title: { marginLeft: 31, fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: colors.onPrimary },
 		button: { fontSize: 20, color: colors.onPrimary }
 	},
 	body: {

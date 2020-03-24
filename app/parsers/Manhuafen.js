@@ -8,11 +8,11 @@ export default class Manhuafen extends Parser {
 	static fetchHtml = async url => {
 		let response = await fetch(url);
 
-		if (response.status == 200) {
-			let html = await response.text();
-			return html;
+		if (response.status === 200) {
+			return await response.text();
 		}
 
+		console.warn('fetchHtml', response);
 		throw new Error(response.statusText);
 	};
 
@@ -27,27 +27,27 @@ export default class Manhuafen extends Parser {
 	};
 
 	static getMainTags = async () => {
-		let html = await fetchHtml(host);
+		let html = await this.fetchHtml(host);
 		let $ = cheerio.load(html);
 		const recommendList = $('#w6 > li')
 			.toArray()
-			.map(li => parseItem1(li));
+			.map(li => parseItem1($(li)));
 
 		html = await this.fetchHtml(host + '/update/');
 		$ = cheerio.load(html);
 		const updateList = $('.list_con_li > .list-comic')
 			.toArray()
 			.slice(0, 9)
-			.map(li => parseItem2(li));
+			.map(li => parseItem2($(li)));
 
 		html = await this.fetchHtml(host + '/rank/click-monthly/');
 		$ = cheerio.load(html);
 		const rankList = $('.items > .ph_r_con_li_c')
 			.toArray()
 			.slice(0, 9)
-			.map(li => parseItem3(li));
+			.map(li => parseItem3($(li)));
 
-		return { recommendList, updateList, rankList };
+		return { success: true, mainTag: [recommendList, updateList, rankList] };
 	};
 
 	static getInfo = async url => {
@@ -158,8 +158,7 @@ export default class Manhuafen extends Parser {
 	};
 }
 
-const parseItem1 = li => {
-	const $li = $(li);
+const parseItem1 = $li => {
 	const $img = $li.find('a > img');
 
 	return {
@@ -171,9 +170,7 @@ const parseItem1 = li => {
 	};
 };
 
-const parseItem2 = li => {
-	const $li = $(li);
-
+const parseItem2 = $li => {
 	return {
 		id: $li.data('key'),
 		title: $li.find('.comic_lit_det').attr('title'),
@@ -190,9 +187,7 @@ const parseItem2 = li => {
 	};
 };
 
-const parseItem3 = li => {
-	const $li = $(li);
-
+const parseItem3 = $li => {
 	return {
 		id: $li.data('key'),
 		title: $li.find('.dec_img').attr('title'),
