@@ -6,7 +6,7 @@ import { FlatList, RefreshControl, View, Text } from 'react-native';
 import { colors } from 'app/styles';
 // import { ComicItem } from './ComicItem';
 
-const parser = require('manhuaview/assets/parsers/Manhuafen.js');
+const parser = require('$parsers/Manhuafen.js');
 
 export default class UpdatePage extends React.Component {
 	state = { isLoading: false, sections: [] };
@@ -37,7 +37,7 @@ export default class UpdatePage extends React.Component {
 	}
 	componentDidMount() {
 		// this.refresh(false);
-		console.log(parser);
+		console.log('parser', parser);
 	}
 	renderSection(section) {
 		return (
