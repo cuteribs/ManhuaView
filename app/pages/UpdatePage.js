@@ -1,11 +1,9 @@
 import React from 'react';
-import { FlatList, RefreshControl, View, Text, AsyncStorage } from 'react-native';
-import { AppLoading } from 'expo';
+import { FlatList, RefreshControl, ScrollView, ActivityIndicator, View, Text, AsyncStorage } from 'react-native';
 import Constants from 'expo-constants';
-import { Icon, IconButton } from 'app/components';
+import { Icon, IconButton, Book } from 'app/components';
 import { Manhuafen } from 'app/parsers';
 import { colors } from 'app/styles';
-// import { ComicItem } from './ComicItem';
 
 const parser = Manhuafen;
 
@@ -24,7 +22,6 @@ export default class UpdatePage extends React.Component {
 				renew = true;
 			}
 		}
-
 		if (renew) {
 			const result = await parser.getMainTags();
 
@@ -32,6 +29,8 @@ export default class UpdatePage extends React.Component {
 				mainTags = result.mainTags;
 				await AsyncStorage.setItem('mainTags', JSON.stringify(mainTags));
 			}
+
+			console.log('mainTags', result);
 		}
 
 		this.setState({ isLoading: false, mainTags: mainTags || [] });
@@ -46,9 +45,9 @@ export default class UpdatePage extends React.Component {
 				<Text style={{ fontSize: 20, margin: 5 }}>{tag.title}</Text>
 				<FlatList
 					numColumns={3}
-					data={section.items}
-					keyExtractor={item => item.title}
-					// renderItem={({ item }) => <ComicItem item={item} navigation={this.props.navigation} />}
+					data={tag.items}
+					keyExtractor={(item) => item.title}
+					renderItem={({ item }) => <Book data={item} navigation={this.props.navigation} />}
 				/>
 			</View>
 		);
@@ -57,10 +56,10 @@ export default class UpdatePage extends React.Component {
 		const { isLoading, mainTags } = this.state;
 
 		if (isLoading) {
-			return <AppLoading />;
+			return <ActivityIndicator size='large' />;
 		}
 
-		return mainTags.map(t => this.renderTag(t));
+		return mainTags.map((t) => this.renderTag(t));
 	}
 	render() {
 		const { navigation } = this.props;
@@ -94,12 +93,12 @@ const styles = {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			backgroundColor: colors.primary
+			backgroundColor: colors.primary,
 		},
 		title: { marginLeft: 31, fontSize: 20, fontWeight: 'bold', textAlign: 'center', color: colors.onPrimary },
-		button: { fontSize: 20, color: colors.onPrimary }
+		button: { fontSize: 20, color: colors.onPrimary },
 	},
 	body: {
-		container: { flex: 1 }
-	}
+		container: { flex: 1 },
+	},
 };
