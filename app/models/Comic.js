@@ -12,5 +12,9 @@ export default class Comic {
 			this.tip = comic.tip;
 			this.author = comic.author;
 		}
+
+		if (this.cover && this.cover.startsWith('//')) {
+			this.cover = 'https:' + this.cover;
+		}
 	}
 }

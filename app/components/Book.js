@@ -10,6 +10,7 @@ export class Book extends React.Component {
 	};
 	render() {
 		const { data, removeAction, navigation } = this.props;
+		console.log('book', data);
 		return (
 			<View style={styles.container}>
 				<View style={styles.body}>

@@ -168,8 +168,8 @@ const parseItem1 = ($li) => {
 	const $img = $li.find('a > img');
 	const item = {
 		id: $li.data('key'),
-		title: $img.attr('title'),
-		cover: $img.attr('src'),
+		title: $li.find('a').attr('title'),
+		cover: $li.find('a > img').attr('src'),
 		tip: $li.find('.tip').text(),
 		author: $li.find('.auth').text(),
 	};
@@ -196,4 +196,19 @@ const parseItem3 = ($li) => {
 		author: $li.find('.img_de ul > li').first().text(),
 	};
 	return new Comic(item);
+};
+
+const parseFilter = ($item) => {
+	const title = $item.find('>label').text().trim();
+	const items = $item
+		.find('>ul>li>a')
+		.toArray()
+		.map((a) => {
+			const $a = $(a);
+			const url = host + $a.attr('href');
+			const name = $a.text().trim();
+			const isActive = $a.hasClass('active');
+			return { name, url, isActive };
+		});
+	return { title, items };
 };

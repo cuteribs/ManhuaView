@@ -40,15 +40,13 @@ export default class UpdatePage extends React.Component {
 		this.refresh(false);
 	}
 	renderTag(tag) {
+		console.log('tag', tag);
 		return (
 			<View key={tag.title} style={{ padding: 5 }}>
 				<Text style={{ fontSize: 20, margin: 5 }}>{tag.title}</Text>
-				<FlatList
-					numColumns={3}
-					data={tag.items}
-					keyExtractor={(item) => item.title}
-					renderItem={({ item }) => <Book data={item} navigation={this.props.navigation} />}
-				/>
+				<View style={styles.body.tagContainer}>
+					{tag.items.map(i => <Book key={i.id} data={i} />)}
+				</View>
 			</View>
 		);
 	}
@@ -59,7 +57,7 @@ export default class UpdatePage extends React.Component {
 			return <ActivityIndicator size='large' />;
 		}
 
-		return mainTags.map((t) => this.renderTag(t));
+		return <ScrollView style={styles.body.container}>{mainTags.map((t) => this.renderTag(t))}</ScrollView>;
 	}
 	render() {
 		const { navigation } = this.props;
@@ -76,7 +74,7 @@ export default class UpdatePage extends React.Component {
 						onPress={() => navigation.navigate('Search')}
 					/>
 				</View>
-				<View style={styles.body.container}>{this.renderBody()}</View>
+				{this.renderBody()}
 			</View>
 		);
 	}
@@ -100,5 +98,6 @@ const styles = {
 	},
 	body: {
 		container: { flex: 1 },
+		tagContainer: { flexDirection: 'row', flexWrap: 'wrap' }
 	},
 };
